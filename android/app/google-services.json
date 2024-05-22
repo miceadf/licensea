@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "965609283116",
+    "firebase_url": "https://licesea-default-rtdb.firebaseio.com",
+    "project_id": "licesea",
+    "storage_bucket": "licesea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965609283116:android:eac3ca22bc6e2b10effb89",
+        "android_client_info": {
+          "package_name": "com.example.licensea"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqQ7sOzMqghi1ZkgbV30xBGYA3Bkz8tQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
