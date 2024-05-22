@@ -1,4 +1,5 @@
 
+//설정
 /*
 Row(
 mainAxisAlignment: MainAxisAlignment.center,
@@ -11,3 +12,5 @@ _auth.signOut().then((value) => setState(() {}));
 child: const Text('logout'))
 ],
 ),
+
+ */

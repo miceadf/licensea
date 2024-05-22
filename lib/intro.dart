@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/widgets.dart';
 
+//인트로 화면
 class introPage extends StatelessWidget {
   const introPage({super.key});
 

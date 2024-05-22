@@ -4,6 +4,7 @@ import 'intro.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+//인트로 화면 실행 용
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

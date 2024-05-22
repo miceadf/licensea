@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:licensea/login.dart';
 import 'main_page.dart';
 
+//회원가입
 class registerPage extends StatefulWidget {
   const registerPage({super.key});
 

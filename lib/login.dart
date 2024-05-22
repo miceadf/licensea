@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'register.dart';
 import 'main_page.dart';
 
+//로그인
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
