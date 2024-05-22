@@ -16,7 +16,7 @@ Future<void> readData() async {
   DataSnapshot snapshot = await realtime.ref().child("info").get();
   Map<dynamic, dynamic> value = snapshot.value as Map<dynamic, dynamic>;
 
-  setDBData(value.);
+  setDBData(value.category);
 }
 
 void setDBData(String category, String name) {
