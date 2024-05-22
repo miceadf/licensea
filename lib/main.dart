@@ -15,25 +15,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static final ValueNotifier<ThemeMode> themeNotfier = ValueNotifier(ThemeMode.light);
-
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: themeNotfier,
-      builder: (_, ThemeMode currentMode, __) {
         return MaterialApp(
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.lightBlue,
-              textTheme: const TextTheme(
-                  headline3: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.italic)),
-            ),
-            darkTheme: ThemeData.dark(),
-            themeMode: currentMode,
+          debugShowCheckedModeBanner: false,
             home: FutureBuilder(
               future: Future.delayed(
                   const Duration(seconds: 3), () => "Intro Completed."),
@@ -43,8 +28,6 @@ class MyApp extends StatelessWidget {
                     child: _splashLoadingWidget(snapshot));
               },
             ));
-      },
-    );
   }
 
   Widget _splashLoadingWidget(AsyncSnapshot<Object?> snapshot) {

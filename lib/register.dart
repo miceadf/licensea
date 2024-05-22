@@ -29,15 +29,15 @@ class _registerPageState extends State<registerPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Register Page'),
-            Image.asset('images/title.png'),
+            Image.asset('assets/images/title.png'),
             SizedBox(
               width: MediaQuery.of(context).size.width*0.7,
-              child: TextField(decoration: const InputDecoration(labelText: 'ID'),
+              child: TextField(decoration: const InputDecoration(labelText: 'Id'),
               controller: _idController),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width*0.7,
-              child: TextField(decoration: const InputDecoration(labelText: 'PASSWORD'),
+              child: TextField(decoration: const InputDecoration(labelText: 'Password'),
               controller: _passwordController),
             ),
             SizedBox(

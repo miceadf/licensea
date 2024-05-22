@@ -45,18 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Login Page'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                    onPressed: () {
-                      // 로그아웃 버튼
-                      _auth.signOut().then((value) => setState(() {}));
-                    },
-                    child: const Text('logout'))
-              ],
-            ),
-            Image.asset('images/title.png'),
+            Image.asset('assets/images/title.png'),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
                 child: TextField(
@@ -92,8 +81,10 @@ class _LoginPageState extends State<LoginPage> {
                       setState(() {
                         _idController.clear();
                         _passwordController.clear();
+                        Future.delayed(const Duration(seconds: 1));
                         if(authState()) {
-                          Navigator.push(context,
+                          Navigator.push(
+                              context,
                               MaterialPageRoute(
                                   builder: (context) => const MainPage()));
                         }
