@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:licensea/login.dart';
+import 'info.dart';
 import 'main_page.dart';
 
 //회원가입
@@ -48,7 +49,7 @@ class _registerPageState extends State<registerPage> {
                 print(_idController.text);
                 _auth.createUserWithEmailAndPassword(
                   email: _idController.text, password: _passwordController.text).then((value)=>_auth.signOut());
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>UserRegistration()));
               }, child: const Text('done'),),
             ),
           ],
