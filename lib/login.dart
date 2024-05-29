@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:licensea/home.dart';
 import 'register.dart';
+import 'package:flutter_svg/svg.dart';
 import 'main_page.dart';
 
 //로그인
@@ -46,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Login Page'),
-            Image.asset('assets/images/title.png'),
+            SvgPicture.asset('assets/images/title.svg'),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
                 child: TextField(
@@ -75,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                               builder: (context) => const registerPage()),
                         );
                       },
-                      child: const Text('sign up')),
+                      child: const Text('회원가입')),
                   TextButton(
                     onPressed: () {
                       loginFunc();
@@ -87,11 +90,11 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const MainPage()));
+                                  builder: (context) => const HomePage()));
                         }
                       });
                     },
-                    child: const Text('log in'),
+                    child: const Text('로그인'),
                   ),
                 ],
               ),

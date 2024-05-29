@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:licensea/home.dart';
 import 'package:licensea/main_page.dart';
 
 class UserRegistration extends StatefulWidget {
@@ -258,7 +259,7 @@ class _UserRegistrationState extends State<UserRegistration> {
                     if (_formKey.currentState!.validate()) {
                       _submitData();
                     }
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const MainPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));
                   },
                   child: Text('저장'),
                 ),

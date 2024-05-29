@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:licensea/login.dart';
 import 'info.dart';
 import 'main_page.dart';
@@ -31,7 +32,7 @@ class _registerPageState extends State<registerPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Register Page'),
-            Image.asset('assets/images/title.png'),
+            SvgPicture.asset('assets/images/title.svg'),
             SizedBox(
               width: MediaQuery.of(context).size.width*0.7,
               child: TextField(decoration: const InputDecoration(labelText: 'Id'),
@@ -44,13 +45,27 @@ class _registerPageState extends State<registerPage> {
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width*0.7,
-              child: TextButton(onPressed: (){
-                setState(() {});
-                print(_idController.text);
-                _auth.createUserWithEmailAndPassword(
-                  email: _idController.text, password: _passwordController.text).then((value)=>_auth.signOut());
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>UserRegistration()));
-              }, child: const Text('done'),),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                        );
+                      },
+                      child: const Text('로그인 페이지로 이동')),
+                  TextButton(onPressed: (){
+                    setState(() {});
+                    print(_idController.text);
+                    _auth.createUserWithEmailAndPassword(
+                        email: _idController.text, password: _passwordController.text).then((value)=>_auth.signOut());
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>UserRegistration()));
+                  }, child: const Text('완료')),
+                ],
+              )
             ),
           ],
         ),
