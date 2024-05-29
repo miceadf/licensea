@@ -12,20 +12,22 @@ class Screen1 extends StatelessWidget {
   const Screen1({super.key});
 
   Future<List<License>> readData() async {
-    String url = 'http://openapi.q-net.or.kr/api/service/rest/InquiryQualInfo/getList?serviceKey=yeBlEyPYUpcvfhWu46aKhkHF5qWlqEHvfHA%2B9wfdI9D%2FLXYI8NNmfbh8AcKdfdCcF1%2BoLsl8mVKtLNvtCESn1A%3D%3D&seriesCd=01';
-    final response = await http.get(Uri.parse(url));
-    
-    if(response.statusCode == 200) {
-      final body = convert.utf8.decode(response.bodyBytes);
-      final xml = Xml2Json()..parse(body);
-      final json =xml.toParker();
+    List<dynamic> result = [];
+    for (int i = 1; i <= 4 ; i++) {
+      String url = 'http://openapi.q-net.or.kr/api/service/rest/InquiryQualInfo/getList?serviceKey=yeBlEyPYUpcvfhWu46aKhkHF5qWlqEHvfHA%2B9wfdI9D%2FLXYI8NNmfbh8AcKdfdCcF1%2BoLsl8mVKtLNvtCESn1A%3D%3D&seriesCd=0$i';
+      final response = await http.get(Uri.parse(url));
 
-      Map<String, dynamic> jsonResult = convert.jsonDecode(json);
-      List<dynamic> list = jsonResult['response']['body']['items']['item'];
+      if(response.statusCode == 200) {
+        final body = convert.utf8.decode(response.bodyBytes);
+        final xml = Xml2Json()..parse(body);
+        final json =xml.toParker();
 
-      return list.map<License>((e) => License.fromMap(e)).toList();
+        Map<String, dynamic> jsonResult = convert.jsonDecode(json);
+        List<dynamic> list = jsonResult['response']['body']['items']['item'];
+        result.addAll(list);
+      }
     }
-    return [];
+    return result.map<License>((e) => License.fromMap(e)).toList();
   }
 
   @override
