@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:licensea/home.dart';
@@ -15,6 +16,9 @@ class _UserRegistrationState extends State<UserRegistration> {
   final _nameController = TextEditingController();
   String? _selectedOccupation;
   String? _selectedEducation;
+
+  // 파이어베이스 인증 인스턴스
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // 생년월일 드롭다운 메뉴
   int _selectedYear = DateTime.now().year;
@@ -272,27 +276,43 @@ class _UserRegistrationState extends State<UserRegistration> {
   }
 
   // 데이터 저장 함수
-  void _submitData() {
-    String birthday = '$_selectedYear/$_selectedMonth/$_selectedDay';
-    String region =
-        '$_selectedSido $_selectedGugun $_selectedDong';
-    _databaseReference.push().set({
-      'name': _nameController.text,
-      'birthday': birthday, // "연도/월/일" 형식으로 저장
-      'region': region, // "도 또는 시/구 또는 동" 형식으로 저장
-      'occupation': _selectedOccupation,
-      'education': _selectedEducation,
-    }).then((_) {
-      // 성공적으로 저장된 경우
+  void _submitData() async {
+    // 현재 로그인한 사용자 가져오기
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      // 로그인한 사용자의 UID 가져오기
+      String userId = user.uid;
+
+      // 사용자 UID 아래에 정보 저장
+      final DatabaseReference userRef =
+      FirebaseDatabase.instance.ref('users/$userId');
+
+      String birthday = '$_selectedYear/$_selectedMonth/$_selectedDay';
+      String region =
+          '$_selectedSido $_selectedGugun $_selectedDong';
+      userRef.set({
+        'name': _nameController.text,
+        'birthday': birthday,
+        'region': region,
+        'occupation': _selectedOccupation,
+        'education': _selectedEducation,
+      }).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('사용자 정보가 저장되었습니다.')),
+        );
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('저장 실패: $error')),
+        );
+      });
+    } else {
+      // 로그인하지 않은 경우 처리
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('사용자 정보가 저장되었습니다.')),
+        SnackBar(content: Text('로그인 후 이용해주세요.')),
       );
-    }).catchError((error) {
-      // 저장 실패 시 에러 메시지 표시
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('저장 실패: $error')),
-      );
-    });
+    }
   }
 
   // 해당 연도/월의 일 수를 반환하는 함수
