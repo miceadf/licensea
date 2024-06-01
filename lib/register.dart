@@ -30,8 +30,13 @@ class _registerPageState extends State<registerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Register Page'),
-            SvgPicture.asset('assets/images/title.svg'),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 50.0,
+              ),
+              child: SvgPicture.asset('assets/images/title.svg'),
+            ),
             SizedBox(
               width: MediaQuery.of(context).size.width*0.7,
               child: TextField(decoration: const InputDecoration(labelText: 'Id'),

@@ -1,45 +1,68 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/animation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-//인트로 화면
-class introPage extends StatelessWidget {
-  const introPage({super.key});
+class IntroPage extends StatelessWidget {
+  const IntroPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'licensea',
-              style: TextStyle(
-                fontSize: 48,
-                fontStyle: FontStyle.italic,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w800,
-                height: 0,
-              ),
+      body: Stack(
+        children: [
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: SvgPicture.asset(
+              'assets/images/wave.svg',
+              fit: BoxFit.cover,
             ),
-            Text(
-              '자   격   증       정   보   의       바   다',
-              textAlign: TextAlign.center,
-
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 13,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-                height: 0,
-              ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          SvgPicture.asset('assets/images/title.svg'),
+                          Positioned(
+                            child: Transform.translate(
+                              offset: const Offset(0, 250),
+                              child: const Text(
+                                '자     격     증         정     보     의         바     다',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 13,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w500,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.white,
+                                      blurRadius: 1.5,
+                                      offset: Offset(0, 0)
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      )
+          ),
+        ],
+      ),
     );
   }
 }
