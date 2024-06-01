@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:licensea/home.dart';
 import 'register.dart';
 import 'package:flutter_svg/svg.dart';
-import 'main_page.dart';
 
 //로그인
 class LoginPage extends StatefulWidget {
@@ -34,79 +33,107 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void loginFunc() async {
-    // 로그인 시 사용자 인증을 거친 다음에 상태 초기화
-    await _auth.signInWithEmailAndPassword(
-        email: _idController.text, password: _passwordController.text);
-    setState(() {});
-    print('login state');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
-                horizontal: 50.0,
-              ),
-              child: SvgPicture.asset('assets/images/title.svg'),
-            ),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: TextField(
-                    decoration: const InputDecoration(labelText: 'Id'),
-                    controller: _idController)),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: TextField(
-                  decoration: const InputDecoration(
-                      labelText: 'Password',
-                  ),
-                  obscureText: _obsecure,
-                  controller: _passwordController,
-
-                )),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const registerPage()),
-                        );
-                      },
-                      child: const Text('회원가입')),
-                  TextButton(
-                    onPressed: () {
-                      loginFunc();
-                      setState(() {
-                        _idController.clear();
-                        _passwordController.clear();
-                        Future.delayed(const Duration(seconds: 1));
-                        if(authState()) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()));
-                        }
-                      });
-                    },
-                    child: const Text('로그인'),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+    // 로딩 팝업 표시
+    showDialog(
+      context: context,
+      barrierDismissible: false, // 팝업 이외의 영역 터치 방지
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(), // 로딩 표시
+        );
+      },
     );
+
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: _idController.text,
+        password: _passwordController.text,
+      );
+
+      // 로그인 성공 시 팝업 닫고 HomePage로 이동
+      Navigator.pop(context); // 팝업 닫기
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } catch (e) {
+      // 로그인 실패 시 팝업 닫고 오류 메시지 표시
+      Navigator.pop(context); // 팝업 닫기
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('로그인 실패: ${e.toString()}')),
+      );
+    }
   }
-}
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 50.0,
+                ),
+                child: SvgPicture.asset('assets/images/title.svg'),
+              ),
+              SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.7,
+                  child: TextField(
+                      decoration: const InputDecoration(labelText: 'Id'),
+                      controller: _idController)),
+              SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.7,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                    ),
+                    obscureText: _obsecure,
+                    controller: _passwordController,
+
+                  )),
+              SizedBox(
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.7,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const registerPage()),
+                          );
+                        },
+                        child: const Text('회원가입')),
+                    TextButton(
+                      onPressed: () {
+                        // 로그인 함수 호출
+                        loginFunc();
+                        setState(() {
+                          _idController.clear();
+                          _passwordController.clear();
+                        });
+                      },
+                      child: const Text('로그인'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
