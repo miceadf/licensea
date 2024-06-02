@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
     } else if (snapshot.hasData) {
       return const LoginPage();
     } else {
-      return const introPage();
+      return const IntroPage();
     }
   }
 }

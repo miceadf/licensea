@@ -16,6 +16,9 @@ class _UserRegistrationState extends State<UserRegistration> {
   final _nameController = TextEditingController();
   String? _selectedOccupation;
   String? _selectedEducation;
+  final _universityController = TextEditingController();
+  final _departmentController = TextEditingController();
+  final _companyController = TextEditingController();
 
   // 파이어베이스 인증 인스턴스
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -257,6 +260,37 @@ class _UserRegistrationState extends State<UserRegistration> {
                     return null;
                   },
                 ),
+                // 직업이 학생이고 학력이 대학교/대학원 재학일 때만 표시
+                if ((_selectedOccupation == '학생' &&
+                    (_selectedEducation == '대학교 재학' ||
+                        _selectedEducation == '대학원 재학')) ||
+                        _selectedEducation == '대학교 졸업')
+                  Column(
+                    children: [
+                      TextFormField(
+                        controller: _universityController,
+                        decoration: InputDecoration(labelText: '대학교'),
+                      ),
+                      SizedBox(height: 16.0),
+                      TextFormField(
+                        controller: _departmentController,
+                        decoration: InputDecoration(labelText: '학과'),
+                      ),
+                      SizedBox(height: 16.0),
+                    ],
+                  ),
+
+                // 직업이 직장인일 때만 표시
+                if (_selectedOccupation == '직장인')
+                  Column(
+                    children: [
+                      TextFormField(
+                        controller: _companyController,
+                        decoration: InputDecoration(labelText: '회사'),
+                      ),
+                      SizedBox(height: 16.0),
+                    ],
+                  ),
                 SizedBox(height: 32.0),
                 ElevatedButton(
                   onPressed: () {
@@ -291,12 +325,32 @@ class _UserRegistrationState extends State<UserRegistration> {
       String birthday = '$_selectedYear/$_selectedMonth/$_selectedDay';
       String region =
           '$_selectedSido $_selectedGugun $_selectedDong';
-      userRef.set({
+      Map<String, dynamic> userData = {
         'name': _nameController.text,
         'birthday': birthday,
         'region': region,
         'occupation': _selectedOccupation,
         'education': _selectedEducation,
+      };
+
+      // 직업이 학생이고 학력이 대학교/대학원 재학/졸업일 때 대학교, 학과 추가
+      if (_selectedOccupation == '학생' &&
+          (_selectedEducation == '대학교 재학' ||
+              _selectedEducation == '대학원 재학')) {
+        userData['university'] = _universityController.text;
+        userData['department'] = _departmentController.text;
+      }
+      if (_selectedEducation == '대학교 졸업') {{
+        userData['university'] = _universityController.text;
+        userData['department'] = _departmentController.text;
+      }}
+      // 직업이 직장인일 때 회사 추가
+      if (_selectedOccupation == '직장인') {
+        userData['company'] = _companyController.text;
+      }
+
+      userRef.set({
+        userData
       }).then((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('사용자 정보가 저장되었습니다.')),
