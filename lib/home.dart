@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'license_list_api.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -67,6 +68,12 @@ class _HomePageState extends State<HomePage>
             indicatorColor: const Color(0xFF6B40FF), // 탭 아래 표시줄 색상
           ),
           Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(top: 10),
+              color: Colors.white,
+              child: Screen1(),
+            ),
+            /*
             child: TabBarView(
               controller: _tabController,
               children: [
@@ -78,6 +85,7 @@ class _HomePageState extends State<HomePage>
                 _buildGiftList("만료된 선물"),
               ],
             ),
+            */
           ),
         ],
       ),
