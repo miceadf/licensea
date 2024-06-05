@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'license_list_api.dart';
+import 'Screen1.dart';
 import 'Screen2.dart';
 import 'Screen3.dart';
 import 'Screen4.dart';
@@ -15,9 +15,9 @@ class _MainPageState extends State<MainPage> {
   int Index = 0;
 
   List<Widget> screens = [
+    //Screen1(),
     Screen2(),
     Screen3(),
-    License_list_api(),
     Screen4(),
   ];
 
