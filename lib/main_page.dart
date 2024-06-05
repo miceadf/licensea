@@ -15,9 +15,9 @@ class _MainPageState extends State<MainPage> {
   int Index = 0;
 
   List<Widget> screens = [
-    Screen1(),
     Screen2(),
     Screen3(),
+    License_list_api(),
     Screen4(),
   ];
 
