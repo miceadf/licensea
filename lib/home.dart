@@ -1,162 +1,335 @@
 import 'package:flutter/material.dart';
-import 'license_list_api.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "선물함",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-          ),
+        title: Row(
+          children: [
+            SvgPicture.asset('assets/images/title.svg', height: 30.0), // title.svg를 앱 바에 추가
+            const SizedBox(width: 10),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    border: InputBorder.none,
+                    suffixIcon: Icon(Icons.search),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
+        backgroundColor: Colors.white, // 앱 바 배경색을 흰색으로 설정
+        elevation: 0, // 앱 바 그림자 제거
       ),
-      body: Column(
-        children: [
-          TabBar(
-            controller: _tabController,
-            tabs: const [
-              Tab(
-                text: "보낸 선물",
-              ),
-              Tab(
-                text: "받은 선물",
-              ),
-              Tab(
-                text: "만료된 선물",
-              ),
-            ],
-            labelColor: const Color(0xFF6B40FF), // 선택된 탭 텍스트 색상
-            labelStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-            unselectedLabelColor: Colors.black, // 선택되지 않은 탭 텍스트 색상
-            unselectedLabelStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-            indicatorColor: const Color(0xFF6B40FF), // 탭 아래 표시줄 색상
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(top: 10),
-              color: Colors.white,
-              child: License_list_api(),
-            ),
-            /*
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // 보낸 선물 탭 내용
-                _buildGiftList("보낸 선물"),
-                // 받은 선물 탭 내용
-                _buildGiftList("받은 선물"),
-                // 만료된 선물 탭 내용
-                _buildGiftList("만료된 선물"),
-              ],
-            ),
-            */
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        // 수정 가능한 아래 탭바
-        child: Container(
-          height: 60,
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: SingleChildScrollView( // 스크롤 가능하도록 SingleChildScrollView 추가
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildBottomNavigationItem(Icons.home, "홈", () {}),
-              _buildBottomNavigationItem(Icons.search, "검색", () {}),
-              _buildBottomNavigationItem(Icons.favorite, "찜", () {}),
-              _buildBottomNavigationItem(Icons.person, "마이", () {}),
+              // --- 상단 이미지 ---
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.grey[300]!),
+                ),
+                child: Image.asset('assets/images/study.png'),
+              ),
+              const SizedBox(height: 20),
+
+              // --- 버튼 그룹 ---
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildButton(
+                    context,
+                    'assets/images/A.svg',
+                    'AI',
+                        () {
+                      // TODO: AI 페이지로 이동하는 로직 추가
+                      _navigateToPage(context, const ChatPage());
+                    },
+                  ),
+                  _buildButton(
+                    context,
+                    'assets/images/document.svg',
+                    '모의시험',
+                        () {
+                      // TODO: 모의시험 페이지로 이동하는 로직 추가
+                      _navigateToPage(context, const ExamPage());
+                    },
+                  ),
+                  _buildButton(
+                    context,
+                    'assets/images/chat.svg',
+                    '채팅 후기',
+                        () {
+                      // TODO: 채팅 후기 페이지로 이동하는 로직 추가
+                      _navigateToPage(context, const ReviewPage());
+                    },
+                  ),
+                  _buildButton(
+                    context,
+                    'assets/images/calendar.svg',
+                    '시험 일정',
+                        () {
+                      // TODO: 시험 일정 페이지로 이동하는 로직 추가
+                      _navigateToPage(context, const SchedulePage());
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+
+              // --- 달력 ---
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF44D39A),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '20XX',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      '6월 2일 화요일',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildCalendar(),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+
+              // --- 진행도 ---
+              const Text(
+                '정보처리기사 취득 계획형 진행도 (4주)',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              _buildProgress(),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  // 아래 탭바 아이템 위젯
-  Widget _buildBottomNavigationItem(
-      IconData icon, String label, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon),
-          Text(label),
+      bottomNavigationBar: BottomNavigationBar(
+        // TODO: 하단 탐색 바 아이템 및 탐색 로직 추가
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: '홈',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: '검색',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: '프로필',
+          ),
         ],
       ),
     );
   }
 
-  // 선물 리스트를 보여주는 위젯
-  Widget _buildGiftList(String type) {
-    // TODO: 실제 데이터를 기반으로 리스트 아이템 생성
-    // 예시 데이터
-    List<Map<String, dynamic>> giftData = [
-      {
-        "image": "assets/images/sample_gift_image.png",
-        "name": "선물 이름 1",
-        "expirationDate": "2023-12-31",
-      },
-      {
-        "image": "assets/images/sample_gift_image.png",
-        "name": "선물 이름 2",
-        "expirationDate": "2024-01-15",
-      },
-    ];
+  // --- 버튼 위젯 생성 함수 ---
+  Widget _buildButton(
+      BuildContext context, String imagePath, String label, VoidCallback onPressed) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: const Color(0xFF49C2EE),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: SvgPicture.asset(imagePath, width: 30, height: 30),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 14.0),
+        ),
+      ],
+    );
+  }
 
-    return ListView.builder(
-      itemCount: giftData.length,
+  // --- 달력 위젯 생성 함수 ---
+  Widget _buildCalendar() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 7,
+      ),
+      itemCount: 31, // 달력 일 수
       itemBuilder: (context, index) {
-        return ListTile(
-          leading: Image.asset(giftData[index]["image"]),
-          title: Text(giftData[index]["name"]),
-          subtitle: Text("만료일: ${giftData[index]["expirationDate"]}"),
-          trailing: type == "보낸 선물"
-              ? ElevatedButton(
-            onPressed: () {
-              // TODO: 선물 다시 보내기 기능 구현
-            },
-            child: const Text("다시 보내기"),
-          )
-              : null,
+        // TODO: 날짜 및 스타일 설정 로직 추가
+        return Center(
+          child: Text(
+            '${index + 1}',
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
         );
       },
+    );
+  }
+
+  // --- 진행도 바 위젯 생성 함수 ---
+  Widget _buildProgress() {
+    return Row(
+      children: [
+        _buildProgressCircle(true, '1주차'),
+        _buildProgressLine(),
+        _buildProgressCircle(false, '2주차'),
+        _buildProgressLine(),
+        _buildProgressCircle(false, '3주차'),
+        _buildProgressLine(),
+        _buildProgressCircle(false, '4주차'),
+      ],
+    );
+  }
+
+  // --- 진행도 원 위젯 생성 함수 ---
+  Widget _buildProgressCircle(bool isActive, String label) {
+    return Column(
+      children: [
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isActive ? const Color(0xFF44D39A) : Colors.lightBlue[100],
+            border: Border.all(
+              color: isActive ? Colors.transparent : Colors.grey[300]!,
+              width: 2.0,
+            ),
+          ),
+          child: Center(
+            child: isActive
+                ? const Icon(
+              Icons.check,
+              color: Colors.white,
+              size: 30,
+            )
+                : Text(
+              '30%',
+              style: TextStyle(
+                color: isActive ? Colors.white : Colors.grey[600],
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            color: isActive ? Colors.black : Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // --- 진행도 선 위젯 생성 함수 ---
+  Widget _buildProgressLine() {
+    return const Expanded(
+      child: Divider(
+        color: Colors.grey,
+        thickness: 2.0,
+        height: 10,
+      ),
+    );
+  }
+
+  // --- 페이지 이동 함수 ---
+  void _navigateToPage(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
+  }
+}
+
+// --- 예시 페이지 ---
+class ChatPage extends StatelessWidget {
+  const ChatPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('채핏')),
+      body: const Center(child: Text('채핏 페이지')),
+    );
+  }
+}
+
+// 모의시험 페이지
+class ExamPage extends StatelessWidget {
+  const ExamPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('모의시험')),
+      body: const Center(child: Text('모의시험 페이지')),
+    );
+  }
+}
+
+// 채팅 후기 페이지
+class ReviewPage extends StatelessWidget {
+  const ReviewPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('채팅 후기')),
+      body: const Center(child: Text('채팅 후기 페이지')),
+    );
+  }
+}
+
+// 시험 일정 페이지
+class SchedulePage extends StatelessWidget {
+  const SchedulePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('시험 일정')),
+      body: const Center(child: Text('시험 일정 페이지')),
     );
   }
 }
