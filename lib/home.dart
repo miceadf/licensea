@@ -56,9 +56,9 @@ class HomePage extends StatelessWidget {
                   _buildButton(
                     context,
                     'assets/images/A.svg',
-                    '채핏',
+                    'AI',
                         () {
-                      // TODO: 채핏 페이지로 이동하는 로직 추가
+                      // TODO: AI 페이지로 이동하는 로직 추가
                       _navigateToPage(context, const ChatPage());
                     },
                   ),
