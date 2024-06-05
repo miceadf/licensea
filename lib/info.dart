@@ -355,7 +355,7 @@ class _UserRegistrationState extends State<UserRegistration> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('사용자 정보가 저장되었습니다.')),
         );
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>const MainPage()));
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('저장 실패: $error')),

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:licensea/home.dart';
+import 'main_page.dart';
 import 'register.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -54,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pop(context); // 팝업 닫기
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const MainPage()),
       );
     } catch (e) {
       // 로그인 실패 시 팝업 닫고 오류 메시지 표시
