@@ -8,8 +8,8 @@ import 'license_detail.dart';
 import 'license.dart';
 import 'package:dio/dio.dart';
 
-class Screen1 extends StatelessWidget {
-  const Screen1({super.key});
+class License_list_api extends StatelessWidget {
+  const License_list_api({super.key});
 
   Future<List<License>> readData() async {
     List<dynamic> result = [];
