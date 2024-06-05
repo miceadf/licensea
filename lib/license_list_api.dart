@@ -261,7 +261,7 @@ class _LicenseListApiState extends State<License_list_api> {
                         return ZoomIn(
                           duration: const Duration(seconds: 1),
                           child: Card(
-                            color: Colors.black38,
+                            color: const Color(0xff9ADBFF),
                             child: ListTile(
                               onTap: () => Navigator.push(
                                 context,
@@ -270,7 +270,10 @@ class _LicenseListApiState extends State<License_list_api> {
                                 ),
                               ),
                               contentPadding: const EdgeInsets.all(8),
-                              title: Text(license.name.toString()),
+                              title: Text(
+                                  license.name.toString(),
+                                style: TextStyle(color: Colors.black),
+                              ),
                               trailing: const Icon(color: Colors.black54, Icons.navigate_next),
                             ),
                           ),
