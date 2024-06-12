@@ -2,12 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
 
-/*void main() {
-  runApp(const Search());
-}*/
-
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  final String id;
+  final String age;
+  final String job;
+  final String location;
+
+  const Profile({
+    super.key,
+    this.id = '없음',
+    this.age = '없음',
+    this.job = '없음',
+    this.location = '없음',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +30,17 @@ class Profile extends StatelessWidget {
                 width: double.infinity,
                 height: 154,
                 decoration: BoxDecoration(
-                    border: Border(
-                        top: BorderSide(
-                            color: Colors.black.withOpacity(0.24),
-                            width: 1),
-                        bottom: BorderSide(
-                            color: Colors.black.withOpacity(0.24),
-                            width: 1))),
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.black.withOpacity(0.24),
+                      width: 1,
+                    ),
+                    bottom: BorderSide(
+                      color: Colors.black.withOpacity(0.24),
+                      width: 1,
+                    ),
+                  ),
+                ),
                 child: Row(
                   children: [
                     Container(
@@ -41,22 +52,27 @@ class Profile extends StatelessWidget {
                       child: Column(
                         children: [
                           Container(
-                              width: 110,
-                              height: 110,
-                              alignment: Alignment.centerLeft,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black.withOpacity(0.24),
-                                  )),
-                              child: Image.asset('images/profile_pic.png')),
+                            width: 110,
+                            height: 110,
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black.withOpacity(0.24),
+                              ),
+                            ),
+                            child: Image.asset('images/profile_pic.png'),
+                          ),
                           Container(
                             alignment: Alignment.centerRight,
-                            child: Text(
-                              "편집",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 10,
-                                color: Colors.black.withOpacity(0.7),
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                "편집",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                  color: Colors.black.withOpacity(0.7),
+                                ),
                               ),
                             ),
                           )
@@ -66,12 +82,12 @@ class Profile extends StatelessWidget {
                     const SizedBox(
                       width: 11,
                     ),
-                    const Column(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "아이디",
+                          "아이디: $id",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13),
                         ),
@@ -79,7 +95,7 @@ class Profile extends StatelessWidget {
                           height: 3,
                         ),
                         Text(
-                          "나이",
+                          "나이: $age",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13),
                         ),
@@ -87,7 +103,7 @@ class Profile extends StatelessWidget {
                           height: 3,
                         ),
                         Text(
-                          "직업",
+                          "직업: $job",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13),
                         ),
@@ -95,7 +111,7 @@ class Profile extends StatelessWidget {
                           height: 3,
                         ),
                         Text(
-                          "지역",
+                          "지역: $location",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13),
                         ),
@@ -106,38 +122,46 @@ class Profile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(""),
                         SizedBox(
                           height: 3,
                         ),
-                        Text(
-                          "편집",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                            color: Colors.black.withOpacity(0.7),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "편집",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                              color: Colors.black.withOpacity(0.7),
+                            ),
                           ),
                         ),
                         SizedBox(
                           height: 8,
                         ),
-                        Text(
-                          "편집",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                            color: Colors.black.withOpacity(0.7),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "편집",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                              color: Colors.black.withOpacity(0.7),
+                            ),
                           ),
                         ),
                         SizedBox(
                           height: 8,
                         ),
-                        Text(
-                          "편집",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                            color: Colors.black.withOpacity(0.7),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "편집",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                              color: Colors.black.withOpacity(0.7),
+                            ),
                           ),
                         ),
                       ],
@@ -252,8 +276,7 @@ class Profile extends StatelessWidget {
                             child: DottedLine(
                               direction: Axis.horizontal,
                               lineLength: double.infinity,
-                              dashColor:
-                              Colors.black.withOpacity(0.24),
+                              dashColor: Colors.black.withOpacity(0.24),
                             ),
                           ),
                           Container(
@@ -263,8 +286,7 @@ class Profile extends StatelessWidget {
                             child: DottedLine(
                               direction: Axis.horizontal,
                               lineLength: double.infinity,
-                              dashColor:
-                              Colors.black.withOpacity(0.24),
+                              dashColor: Colors.black.withOpacity(0.24),
                             ),
                           ),
                           Container(
@@ -274,8 +296,7 @@ class Profile extends StatelessWidget {
                             child: DottedLine(
                               direction: Axis.horizontal,
                               lineLength: double.infinity,
-                              dashColor:
-                              Colors.black.withOpacity(0.24),
+                              dashColor: Colors.black.withOpacity(0.24),
                             ),
                           ),
                           Container(
@@ -285,8 +306,7 @@ class Profile extends StatelessWidget {
                             child: DottedLine(
                               direction: Axis.horizontal,
                               lineLength: double.infinity,
-                              dashColor:
-                              Colors.black.withOpacity(0.24),
+                              dashColor: Colors.black.withOpacity(0.24),
                             ),
                           ),
                         ],
@@ -298,12 +318,15 @@ class Profile extends StatelessWidget {
                           padding: EdgeInsets.only(
                             top: 16,
                           ),
-                          child: Text(
-                            "편집",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              color: Colors.black.withOpacity(0.7),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "편집",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.black.withOpacity(0.7),
+                              ),
                             ),
                           ),
                         ),
@@ -311,12 +334,15 @@ class Profile extends StatelessWidget {
                           padding: EdgeInsets.only(
                             top: 70,
                           ),
-                          child: Text(
-                            "편집",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              color: Colors.black.withOpacity(0.7),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "편집",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.black.withOpacity(0.7),
+                              ),
                             ),
                           ),
                         ),
@@ -324,12 +350,15 @@ class Profile extends StatelessWidget {
                           padding: EdgeInsets.only(
                             top: 70,
                           ),
-                          child: Text(
-                            "편집",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              color: Colors.black.withOpacity(0.7),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "편집",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.black.withOpacity(0.7),
+                              ),
                             ),
                           ),
                         ),
@@ -337,12 +366,15 @@ class Profile extends StatelessWidget {
                           padding: EdgeInsets.only(
                             top: 70,
                           ),
-                          child: Text(
-                            "편집",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              color: Colors.black.withOpacity(0.7),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "편집",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.black.withOpacity(0.7),
+                              ),
                             ),
                           ),
                         ),
@@ -373,7 +405,7 @@ class Profile extends StatelessWidget {
                             Padding(
                               padding:
                               const EdgeInsets.only(top: 13.5, left: 21.17),
-                              child: Image.asset('images/bookmark.png'),
+                              child: Icon(Icons.bookmark),
                             ),
                           ],
                         ),

@@ -35,6 +35,7 @@ dependencies:
   provider: ^6.0.1 # provider 패키지 추가
   http: ^0.13.4
   dio: ^5.0.0
+  dotted_line: ^3.2.2
   flutter:
     sdk: flutter
 
