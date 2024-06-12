@@ -4,9 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:licensea/home.dart';
 import 'main_page.dart';
 import 'register.dart';
-import 'package:flutter_svg/svg.dart';
 
-//로그인
+// 로그인
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -18,8 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final _idController = TextEditingController(); // 아이디 입력 컨트롤러
   final _passwordController = TextEditingController(); // 비밀번호 입력 컨트롤러
   final _auth = FirebaseAuth.instance; // 파이어베이스 인증 객체
-  var _obsecure = true;
-  var _iconButton = '';
+  var _obsecure = true; // 비밀번호 표시 여부
 
   @override
   void initState() {
@@ -28,9 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool authState() {
-    // 로그인 상태를 확인하고 반환하는 위젯
-    return _auth.currentUser == null
-        ? false : true;
+    // 로그인 상태를 확인하고 반환하는 함수
+    return _auth.currentUser == null ? false : true;
   }
 
   void loginFunc() async {
@@ -51,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
 
-      // 로그인 성공 시 팝업 닫고 HomePage로 이동
+      // 로그인 성공
       Navigator.pop(context); // 팝업 닫기
       Navigator.pushReplacement(
         context,
@@ -66,50 +63,61 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10.0,
-                  horizontal: 50.0,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: GestureDetector(
+        // 키보드 숨기기
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10.0,
+                    horizontal: 50.0,
+                  ),
+                  child: SvgPicture.asset('assets/images/title.svg'),
                 ),
-                child: SvgPicture.asset('assets/images/title.svg'),
-              ),
-              SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.7,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
                   child: TextField(
-                      decoration: const InputDecoration(labelText: 'Id'),
-                      controller: _idController)),
-              SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.7,
+                    decoration: const InputDecoration(labelText: 'Id'),
+                    controller: _idController,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
                   child: TextField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
+                      // 비밀번호 표시/숨기기 아이콘 추가
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obsecure ? Icons.visibility_off : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obsecure = !_obsecure;
+                          });
+                        },
+                      ),
                     ),
                     obscureText: _obsecure,
                     controller: _passwordController,
-
-                  )),
-              SizedBox(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.7,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -117,24 +125,27 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const registerPage()),
                           );
                         },
-                        child: const Text('회원가입')),
-                    TextButton(
-                      onPressed: () {
-                        // 로그인 함수 호출
-                        loginFunc();
-                        setState(() {
-                          _idController.clear();
-                          _passwordController.clear();
-                        });
-                      },
-                      child: const Text('로그인'),
-                    ),
-                  ],
+                        child: const Text('회원가입'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // 로그인 함수 호출
+                          loginFunc();
+                          setState(() {
+                            _idController.clear();
+                            _passwordController.clear();
+                          });
+                        },
+                        child: const Text('로그인'),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      );
-    }
+      ),
+    );
   }
+}
