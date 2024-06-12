@@ -264,7 +264,7 @@ class _UserRegistrationState extends State<UserRegistration> {
                 if ((_selectedOccupation == '학생' &&
                     (_selectedEducation == '대학교 재학' ||
                         _selectedEducation == '대학원 재학')) ||
-                    _selectedEducation == '대학교 졸업')
+                        _selectedEducation == '대학교 졸업')
                   Column(
                     children: [
                       TextFormField(
@@ -311,73 +311,60 @@ class _UserRegistrationState extends State<UserRegistration> {
 
   // 데이터 저장 함수
   void _submitData() async {
-    //모든 필드 유효성 검사
-    if (_formKey.currentState!.validate() &&
-        _selectedSido != null &&
-        _selectedGugun != null &&
-        _selectedDong != null &&
-        _selectedOccupation != null &&
-        _selectedEducation != null) {
-      // 현재 로그인한 사용자 가져오기
-      User? user = _auth.currentUser;
+    // 현재 로그인한 사용자 가져오기
+    User? user = _auth.currentUser;
 
-      if (user != null) {
-        // 로그인한 사용자의 UID 가져오기
-        String userId = user.uid;
+    if (user != null) {
+      // 로그인한 사용자의 UID 가져오기
+      String userId = user.uid;
 
-        // 사용자 UID 아래에 정보 저장
-        final DatabaseReference userRef =
-        FirebaseDatabase.instance.ref('users/$userId');
+      // 사용자 UID 아래에 정보 저장
+      final DatabaseReference userRef =
+      FirebaseDatabase.instance.ref('users/$userId');
 
-        String birthday = '$_selectedYear/$_selectedMonth/$_selectedDay';
-        String region =
-            '$_selectedSido $_selectedGugun $_selectedDong';
-        Map<String, dynamic> userData = {
-          'name': _nameController.text,
-          'birthday': birthday,
-          'region': region,
-          'occupation': _selectedOccupation,
-          'education': _selectedEducation,
-        };
+      String birthday = '$_selectedYear/$_selectedMonth/$_selectedDay';
+      String region =
+          '$_selectedSido $_selectedGugun $_selectedDong';
+      Map<String, dynamic> userData = {
+        'name': _nameController.text,
+        'birthday': birthday,
+        'region': region,
+        'occupation': _selectedOccupation,
+        'education': _selectedEducation,
+      };
 
-        // 직업이 학생이고 학력이 대학교/대학원 재학/졸업일 때 대학교, 학과 추가
-        if (_selectedOccupation == '학생' &&
-            (_selectedEducation == '대학교 재학' ||
-                _selectedEducation == '대학원 재학')) {
-          userData['university'] = _universityController.text;
-          userData['department'] = _departmentController.text;
-        }
-        if (_selectedEducation == '대학교 졸업') {{
-          userData['university'] = _universityController.text;
-          userData['department'] = _departmentController.text;
-        }}
-        // 직업이 직장인일 때 회사 추가
-        if (_selectedOccupation == '직장인') {
-          userData['company'] = _companyController.text;
-        }
-
-        userRef.update({
-          'info': userData, // userData를 'info'라는 키 아래에 저장
-        }).then((_) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('사용자 정보가 저장되었습니다.')),
-          );
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));
-        }).catchError((error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('저장 실패: $error')),
-          );
-        });
-      } else {
-        // 로그인하지 않은 경우 처리
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인 후 이용해주세요.')),
-        );
+      // 직업이 학생이고 학력이 대학교/대학원 재학/졸업일 때 대학교, 학과 추가
+      if (_selectedOccupation == '학생' &&
+          (_selectedEducation == '대학교 재학' ||
+              _selectedEducation == '대학원 재학')) {
+        userData['university'] = _universityController.text;
+        userData['department'] = _departmentController.text;
       }
+      if (_selectedEducation == '대학교 졸업') {{
+        userData['university'] = _universityController.text;
+        userData['department'] = _departmentController.text;
+      }}
+      // 직업이 직장인일 때 회사 추가
+      if (_selectedOccupation == '직장인') {
+        userData['company'] = _companyController.text;
+      }
+
+      userRef.set({
+        userData
+      }).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('사용자 정보가 저장되었습니다.')),
+        );
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>const MainPage()));
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('저장 실패: $error')),
+        );
+      });
     } else {
-      //유효하지 않은 경우 스낵바 메시지 표시
+      // 로그인하지 않은 경우 처리
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('모든 정보를 입력해주세요.')),
+        SnackBar(content: Text('로그인 후 이용해주세요.')),
       );
     }
   }

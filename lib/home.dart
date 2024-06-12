@@ -6,34 +6,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            SvgPicture.asset('assets/images/title.svg', height: 30.0), // title.svg를 앱 바에 추가
-            const SizedBox(width: 10),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search...',
-                    border: InputBorder.none,
-                    suffixIcon: Icon(Icons.search),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.white, // 앱 바 배경색을 흰색으로 설정
-        elevation: 0, // 앱 바 그림자 제거
-      ),
-      body: SingleChildScrollView( // 스크롤 가능하도록 SingleChildScrollView 추가
+    return SingleChildScrollView( // 스크롤 가능하도록 SingleChildScrollView 추가
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -139,25 +112,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        // TODO: 하단 탐색 바 아이템 및 탐색 로직 추가
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '검색',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '프로필',
-          ),
-        ],
-      ),
-    );
+      );
   }
 
   // --- 버튼 위젯 생성 함수 ---
