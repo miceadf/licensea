@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'airecommendation.dart';
 import 'chatbot.dart';
 import 'license_list_api.dart';
 import 'home.dart';
@@ -15,6 +16,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int Index = 0;
+  final AIRecommendationService _aiService = AIRecommendationService();
 
   List<Widget> screens = [
     HomePage(),
@@ -24,6 +26,14 @@ class _MainPageState extends State<MainPage> {
   ];
 
   List<String> appbarTitle = ['홈', 'AI', '검색', '프로필'];
+
+  @override
+  void initState() {
+    super.initState();
+    _aiService.initialize().then((_) {
+      _aiService.updateRecommendations();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

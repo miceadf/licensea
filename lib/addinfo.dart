@@ -95,7 +95,7 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
         // Firebase Database에 데이터 저장
         await _databaseReference.child('users/$userId/info').update({
           'reason': _selectedReason,
-          'company': _companyController.text.isEmpty ? '없음' : _companyController.text,
+          'desiredCompany': _companyController.text.isEmpty ? '없음' : _companyController.text,
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('정보가 저장되었습니다.')),
