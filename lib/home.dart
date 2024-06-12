@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(color: Colors.grey[300]!),
                 ),
-                child: Image.asset('assets/images/study.png'),
+                child: SvgPicture.asset('assets/images/study.svg'),
               ),
               const SizedBox(height: 20),
 

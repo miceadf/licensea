@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'chatbot.dart';
 import 'license_list_api.dart';
 import 'home.dart';
 import 'profile.dart';
@@ -17,7 +18,7 @@ class _MainPageState extends State<MainPage> {
 
   List<Widget> screens = [
     HomePage(),
-    Screen4(),
+    LicenseaChatbotPage(),
     License_list_api(),
     Profile(),
   ];
