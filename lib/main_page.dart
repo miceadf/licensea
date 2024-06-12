@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'license_list_api.dart';
 import 'home.dart';
-import 'Screen3.dart';
+import 'profile.dart';
 import 'Screen4.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,9 +17,9 @@ class _MainPageState extends State<MainPage> {
 
   List<Widget> screens = [
     HomePage(),
-    Screen3(),
-    License_list_api(),
     Screen4(),
+    License_list_api(),
+    Profile(),
   ];
 
   List<String> appbarTitle = ['홈', 'AI', '검색', '프로필'];
