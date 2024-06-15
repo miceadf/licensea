@@ -33,7 +33,7 @@ class AIRecommendationService {
       List<dynamic> selectedCategories = List.from(categoriesSnapshot.value as List);
 
       // "추천 완료" 확인
-      DataSnapshot infoSnapshot = await _databaseReference.child('users/$userId/info').get();
+      DataSnapshot infoSnapshot = await _databaseReference.child('users/$userId/settings').get();
       bool recommendationCompleted = infoSnapshot.child('recommendationCompleted').value as bool? ?? false;
 
       if(!recommendationCompleted) {

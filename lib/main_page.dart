@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'airecommendation.dart';
 import 'license_list_api.dart';
 import 'home.dart';
 import 'profile.dart';
@@ -15,6 +16,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int Index = 0;
+  final AIRecommendationService _aiService = AIRecommendationService();
 
   List<Widget> screens = [
     HomePage(),
@@ -24,6 +26,14 @@ class _MainPageState extends State<MainPage> {
   ];
 
   List<String> appbarTitle = ['홈', 'AI', '검색', '프로필'];
+
+  @override
+  void initState() {
+    super.initState();
+    _aiService.initialize().then((_) {
+      _aiService.updateRecommendations(); // AI 추천 로직 실행
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +68,7 @@ class _MainPageState extends State<MainPage> {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
+        automaticallyImplyLeading: false, // 뒤로가기 버튼 자동 생성 방지
       ),
       body: Column(
         children: [

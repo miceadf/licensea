@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:licensea/main_page.dart';
+import 'package:licensea/plan.dart';
 
 class AdditionalInfoPage extends StatefulWidget {
   @override
@@ -101,7 +101,7 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
           SnackBar(content: Text('정보가 저장되었습니다.')),
         );
         // 다음 페이지로 이동
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudyPlanPage()));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('로그인 후 이용해주세요.')),

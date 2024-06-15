@@ -67,7 +67,7 @@ class _LicenseaChatbotPageState extends State<LicenseaChatbotPage> {
           message.isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 color: message.isUser ? Colors.blue : Colors.grey[300],
                 borderRadius: BorderRadius.circular(20.0),
