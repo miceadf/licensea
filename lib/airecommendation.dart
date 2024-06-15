@@ -32,17 +32,27 @@ class AIRecommendationService {
       DataSnapshot categoriesSnapshot = await _databaseReference.child('users/$userId/categories').get();
       List<dynamic> selectedCategories = List.from(categoriesSnapshot.value as List);
 
-      // AI 모델에 전달할 프롬프트 생성
-      String prompt = _generatePrompt(userInfo, selectedCategories);
+      // "추천 완료" 확인
+      DataSnapshot infoSnapshot = await _databaseReference.child('users/$userId/info').get();
+      bool recommendationCompleted = infoSnapshot.child('recommendationCompleted').value as bool? ?? false;
 
-      // AI 추천 결과 가져오기
-      String recommendations = await _getAIRecommendations(prompt);
+      if(!recommendationCompleted) {
+        // AI 모델에 전달할 프롬프트 생성
+        String prompt = _generatePrompt(userInfo, selectedCategories);
 
-      // 추천 결과 파싱 및 저장
-      List<String> licenseList = _parseRecommendations(recommendations);
-      await _databaseReference.child('users/$userId/license').set(licenseList);
+        // AI 추천 결과 가져오기
+        String recommendations = await _getAIRecommendations(prompt);
 
-      print('AI 추천 자격증 저장 완료: $licenseList');
+        // 추천 결과 파싱 및 저장
+        List<String> licenseList = _parseRecommendations(recommendations);
+        await _databaseReference.child('users/$userId/license').set(licenseList);
+
+        // "추천 완료" 업데이트
+        await _databaseReference.child('users/$userId/settings').update({'recommendationCompleted': true});
+        print('AI 추천 자격증 저장 완료: $licenseList');
+      } else {
+        print('이미 AI 추천을 받은 유저입니다.');
+      }
     } else {
       print('사용자 로그인 정보를 찾을 수 없습니다.');
     }
