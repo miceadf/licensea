@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'license_list_api.dart';
 import 'home.dart';
 import 'profile.dart';
-import 'Screen4.dart';
+import 'chatbot.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _MainPageState extends State<MainPage> {
 
   List<Widget> screens = [
     HomePage(),
-    Screen4(),
+    LicenseaChatbotPage(),
     License_list_api(),
     Profile(),
   ];
