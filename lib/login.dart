@@ -84,6 +84,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: SvgPicture.asset('assets/images/title.svg'),
                 ),
+                const SizedBox(height: 32.0),
+                const Text(
+                  '로그인',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: TextField(
