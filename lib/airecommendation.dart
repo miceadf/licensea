@@ -61,10 +61,19 @@ class AIRecommendationService {
   String _generatePrompt(Map<String, dynamic> userInfo, List<dynamic> categories) {
     String prompt = "다음 사용자 정보를 바탕으로 자격증을 추천해주세요.\n\n";
     prompt += "사용자 정보:\n";
-    userInfo.forEach((key, value) {
-      prompt += "• $key: $value\n";
-    });
-    prompt += "\n선호 분야:\n";
+    prompt += "• 생년월일: ${userInfo['birthday']}\n";
+    prompt += "• 거주지역: ${userInfo['region']}\n";
+    prompt += "• 직업: ${userInfo['occupation']}\n";
+    prompt += "• 학력: ${userInfo['education']}\n";
+    prompt += "• 대학교: ${userInfo['university'] != null ? userInfo['university'] : '사용자가 다닌 대학 정보가 없습니다.'}\n";
+    prompt += "• 학과: ${userInfo['department'] != null ? userInfo['department'] : '사용자가 다닌 대학 학과 정보가 없습니다.'}\n";
+    prompt += "• 회사: ${userInfo['company'] != null ? userInfo['company'] : '사용자는 회사에 다니지 않습니다.'}\n";
+    prompt += "• 취득 희망 사유: ${userInfo['reason']}\n";
+    prompt += "• 지원 희망 기업: ${userInfo['desiredCompany']}\n";
+    prompt += "• 희망 소요 기간 (개월): ${userInfo['desiredDurationMonths']}\n";
+    prompt += "• 희망 시험 시작일: ${userInfo['desiredExamStartDate']}\n";
+    prompt += "• 희망 시험 종료일: ${userInfo['desiredExamEndDate']}\n";
+    prompt += "\n취득 선호 자격증 분야:\n";
     categories.forEach((category) {
       prompt += "• $category\n";
     });

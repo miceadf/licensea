@@ -82,7 +82,7 @@ class _LicenseaChatbotPageState extends State<LicenseaChatbotPage> {
                   strong: TextStyle( // 굵은 텍스트 스타일
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: message.isUser ? Colors.white : Colors.lightBlueAccent,
+                    color: message.isUser ? Colors.white : Colors.black,
                   ),
                   h1: TextStyle( // 문단 제목 1 스타일
                     fontSize: 15,
@@ -177,9 +177,20 @@ class _LicenseaChatbotPageState extends State<LicenseaChatbotPage> {
               '이름, 생년월일, 지역 등 개인 정보는 답변에 절대 포함하지 마세요.\n'
               '질문 특성 상 답변에 꼭 필요한 경우에 한해 포함하되, 대체어를 고려하여 답변하세요.\n'
               '\n사용자 정보:\n'
-              '${userInfo.toString()}\n'
+              '• 생년월일: ${userInfo['birthday']}\n'
+              '• 거주지역: ${userInfo['region']}\n'
+              '• 직업: ${userInfo['occupation']}\n'
+              '• 학력: ${userInfo['education']}\n'
+              '• 대학교: ${userInfo['university'] != null ? userInfo['university'] : '사용자가 다닌 대학 정보가 없습니다.'}\n'
+              '• 학과: ${userInfo['department'] != null ? userInfo['department'] : '사용자가 다닌 대학 학과 정보가 없습니다.'}\n'
+              '• 회사: ${userInfo['company'] != null ? userInfo['company'] : '사용자는 회사에 다니지 않습니다.'}\n'
+              '• 취득 희망 사유: ${userInfo['reason']}\n'
+              '• 지원 희망 기업: ${userInfo['desiredCompany']}\n'
+              '• 희망 소요 기간 (개월): ${userInfo['desiredDurationMonths']}\n'
+              '• 희망 시험 시작일: ${userInfo['desiredExamStartDate']}\n'
+              '• 희망 시험 종료일: ${userInfo['desiredExamEndDate']}\n'
               '취득희망 자격증 분야:\n'
-              '${userCategories.join(', ')}';
+              '${userCategories.join(',\n')}';
           print('API 요청 (사용자 정보 포함): $augmentedText');
 
           // 챗봇 답변 생성 (augmentedText 사용)
