@@ -22,7 +22,7 @@ class _MainPageState extends State<MainPage> {
     HomePage(),
     LicenseaChatbotPage(),
     License_list_api(),
-    Profile(),
+    ProfilePage(),
   ];
 
   List<String> appbarTitle = ['홈', 'AI', '검색', '프로필'];

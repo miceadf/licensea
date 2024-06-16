@@ -1,232 +1,219 @@
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:dotted_line/dotted_line.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'login.dart';
+import 'info.dart';
 
-class Profile extends StatelessWidget {
-  final String id;
-  final String age;
-  final String job;
-  final String location;
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
 
-  const Profile({
-    Key? key,
-    this.id = '없음',
-    this.age = '없음',
-    this.job = '없음',
-    this.location = '없음',
-  }) : super(key: key);
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final user = FirebaseAuth.instance.currentUser!;
+  late DatabaseReference _userRef;
+  Map<dynamic, dynamic>? _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _userRef = FirebaseDatabase.instance.ref().child('users/${user.uid}');
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      final snapshot = await _userRef.once();
+      if (snapshot.snapshot.value != null) {
+        setState(() {
+          _userData = snapshot.snapshot.value as Map<dynamic, dynamic>?;
+        });
+      }
+    } catch (error) {
+      print('Error loading user data: $error');
+      // 에러 처리
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                //두번 째 박스
-                width: double.infinity,
-                height: 154,
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.black.withOpacity(0.24),
-                      width: 1,
-                    ),
-                    bottom: BorderSide(
-                      color: Colors.black.withOpacity(0.24),
-                      width: 1,
-                    ),
-                  ),
+    Map? userInfo = _userData?['info'] as Map? ?? {};
+    List<dynamic>? userCategories = _userData?['categories'] as List? ?? [];
+    List<dynamic>? userBookmarks = _userData?['bookmarks'] as List? ?? [];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('프로필'),
+      ),
+      body: _userData == null
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 프로필 이미지 및 기본 정보
+            _buildProfileSection(userInfo),
+            const SizedBox(height: 32.0),
+
+            // 자격증 추천 정보
+            _buildCertificationSection(userInfo, userCategories),
+            const SizedBox(height: 32.0),
+
+            // 북마크
+            _buildBookmarkSection(userBookmarks),
+            const SizedBox(height: 32.0),
+
+            // 로그아웃 및 수정 버튼
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                  },
+                  child: const Text('로그아웃'),
                 ),
-                child: Row(
-                  children: [
-                    Container(
-                      //프로필 사진 들어갈 곳
-                      width: 110,
-                      height: 130,
-                      margin: EdgeInsets.only(left: 19, top: 10),
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 110,
-                            height: 110,
-                            alignment: Alignment.centerLeft,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black.withOpacity(0.24),
-                              ),
-                            ),
-                            child: Image.asset('images/profile_pic.png'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 11,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildRow("아이디:", id),
-                        buildRow("나이:", age),
-                        buildRow("직업:", job),
-                        buildRow("지역:", location),
-                      ],
-                    ),
-                    Expanded(child: Container()),
-                    SizedBox(width: 16), // Add some padding at the end
-                  ],
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserRegistration()),
+                    );
+                  },
+                  child: const Text('수정'),
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 385,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      width: 1,
-                      color: Colors.black.withOpacity(0.24),
-                    ),
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 40.0, top: 12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          buildText("취득 희망 분야", ["-IT,컴퓨터", "-영어"]),
-                          SizedBox(height: 16),
-                          buildText("취득 사유", ["-취직", "-취미"]),
-                          SizedBox(height: 16),
-                          buildText("지원 희망 기업", ["-카카오", "-네이버"]),
-                          SizedBox(height: 16),
-                          buildText("소요 기간 및 일정", ["-1개월 내 선호", "-시험 일정 : 5월 1일 ~ 6월 30일 내"]),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 16), // Add some padding at the end
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 173,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      width: 1,
-                      color: Colors.black.withOpacity(0.24),
-                    ),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 13.5, left: 21.17),
-                          child: Icon(Icons.bookmark),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6.17, top: 13.5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              buildText("북마크", ["-정보처리기사", "-정보처리기능사", "-리눅스마스터"]),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget buildRow(String label, String value) {
+  Widget _buildProfileSection(Map? userInfo) {
     return Row(
       children: [
-        Text(
-          label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-        ),
-        Text(
-          value,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-        ),
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            "편집",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 10,
-              color: Colors.black.withOpacity(0.7),
+        Container(
+          width: 80.0,
+          height: 80.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.grey,
+              width: 2.0,
             ),
+          ),
+          child: ClipOval(
+            child: SvgPicture.asset(
+              'assets/images/profile_pic.svg',
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        const SizedBox(width: 16.0),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                user.email ?? '이메일 없음',
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8.0),
+              _buildInfoText('생년월일\t', userInfo?['birthday'] ?? '없음'),
+              _buildInfoText('직업\t', userInfo?['occupation'] ?? '없음'),
+              _buildInfoText('지역\t', userInfo?['region'] ?? '없음'),
+              _buildInfoText('학교\t', userInfo?['university'] ?? '없음'),
+              _buildInfoText('학과\t', userInfo?['department'] ?? '없음'),
+              _buildInfoText('회사\t', userInfo?['company'] ?? '없음'),
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget buildText(String title, List<String> contents) {
+  Widget _buildCertificationSection(
+      Map? userInfo, List<dynamic>? userCategories) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              title,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                "편집",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10,
-                  color: Colors.black.withOpacity(0.7),
-                ),
-              ),
-            ),
-          ]
+        const Text(
+          '추가 정보',
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: contents.map((content) => Text(content, style: TextStyle(fontSize: 12))).toList(),
-        ),
+        const SizedBox(height: 8.0),
+        // userCategories가 List이므로 ListView.builder를 사용하여 표시
+        _buildInfoText('취득 희망 분야',
+            (userCategories != null && userCategories.isNotEmpty)
+                ? userCategories.join('\n')
+                : '없음'),
+        _buildInfoText('취득 희망 사유', userInfo?['reason'] ?? '없음'),
+        _buildInfoText('지원 희망 기업', userInfo?['desiredCompany'] ?? '없음'),
+        _buildInfoText(
+            '희망 소요 기간',
+            userInfo?['desiredDurationMonths'] != null
+                ? '${userInfo?['desiredDurationMonths']}개월'
+                : '없음'),
+        _buildInfoText(
+            '희망 시험 일정',
+            userInfo?['desiredExamStartDate'] != null &&
+                userInfo?['desiredExamEndDate'] != null
+                ? '${userInfo?['desiredExamStartDate']} ~ ${userInfo?['desiredExamEndDate']}'
+                : '없음'),
       ],
     );
   }
 
-  Widget buildDottedLine() {
-    return Container(
-      padding: EdgeInsets.only(top: 28),
-      child: DottedLine(
-        direction: Axis.horizontal,
-        lineLength: double.infinity,
-        dashColor: Colors.black.withOpacity(0.24),
+  Widget _buildBookmarkSection(List<dynamic>? userBookmarks) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '북마크',
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8.0),
+        if (userBookmarks != null && userBookmarks.isNotEmpty)
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: userBookmarks.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(userBookmarks[index].toString()),
+              );
+            },
+          )
+        else
+          const Text('북마크가 없습니다.'),
+      ],
+    );
+  }
+
+  Widget _buildInfoText(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Text(
+            '$label: ',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(value),
+        ],
       ),
     );
   }
 }
-

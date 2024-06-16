@@ -94,9 +94,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: PretendardVariable
+    - family: NotoSansKR-VariableFont_wght
       fonts:
-        - asset: assets/fonts/PretendardVariable.ttf
+        - asset: assets/fonts/NotoSansKR-VariableFont_wght.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

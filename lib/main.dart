@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'PretendardVariable'
+        fontFamily: 'NotoSansKR-VariableFont_wght'
       ),
       home: IntroPageWrapper(),
     );

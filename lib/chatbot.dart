@@ -82,7 +82,7 @@ class _LicenseaChatbotPageState extends State<LicenseaChatbotPage> {
                   strong: TextStyle( // 굵은 텍스트 스타일
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: message.isUser ? Colors.white : Colors.cyan,
+                    color: message.isUser ? Colors.white : Colors.lightBlueAccent,
                   ),
                   h1: TextStyle( // 문단 제목 1 스타일
                     fontSize: 15,
@@ -172,7 +172,7 @@ class _LicenseaChatbotPageState extends State<LicenseaChatbotPage> {
         List<dynamic> userCategories = List.from(categorySnapshot.value as List);
 
         if (userInfo != null) {
-          // API 요청에 사용자 정보 추가 (화면에 표시되지 않을 메시지)
+          // API 요청에 사용자 정보 추가 (화면에 표시되지 않음)
           String augmentedText = '$text\n\n위 질문에 대해 아래 주어진 사용자 정보 및 취득희망 자격증 분야를 참고하여 답변하세요.\n'
               '이름, 생년월일, 지역 등 개인 정보는 답변에 절대 포함하지 마세요.\n'
               '질문 특성 상 답변에 꼭 필요한 경우에 한해 포함하되, 대체어를 고려하여 답변하세요.\n'
