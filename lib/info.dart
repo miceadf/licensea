@@ -359,6 +359,7 @@ class _UserRegistrationState extends State<UserRegistration> {
         try {
           await userRef.update({
             'info': userData, // userData를 'info'라는 키 아래에 저장
+            'bookmarks': ['없음'], // bookmarks 경로 생성
           });
 
           // 저장 성공 시 스낵바 메시지 표시

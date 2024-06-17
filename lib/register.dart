@@ -45,6 +45,15 @@ class _registerPageState extends State<registerPage> {
                   ),
                   child: SvgPicture.asset('assets/images/title.svg'),
                 ),
+                const SizedBox(height: 32.0),
+                const Text(
+                  '회원가입',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: TextField(

@@ -1,16 +1,23 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'intro.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'chatbot.dart';
 
-//인트로 화면 실행 용
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ChatbotState(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,26 +25,41 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-            home: FutureBuilder(
-              future: Future.delayed(
-                  const Duration(seconds: 3), () => "Intro Completed."),
-              builder: (context, snapshot) {
-                return AnimatedSwitcher(
-                    duration: const Duration(seconds: 3),
-                    child: _splashLoadingWidget(snapshot));
-              },
-            ));
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'NotoSansKR-VariableFont_wght'
+      ),
+      home: IntroPageWrapper(),
+    );
+  }
+}
+
+class IntroPageWrapper extends StatefulWidget {
+  const IntroPageWrapper({Key? key}) : super(key: key);
+
+  @override
+  State<IntroPageWrapper> createState() => _IntroPageWrapperState();
+}
+
+class _IntroPageWrapperState extends State<IntroPageWrapper> {
+  @override
+  void initState() {
+    super.initState();
+    _initializeChatbotAndNavigate();
   }
 
-  Widget _splashLoadingWidget(AsyncSnapshot<Object?> snapshot) {
-    if (snapshot.hasError) {
-      return const Text("Error!!");
-    } else if (snapshot.hasData) {
-      return const LoginPage();
-    } else {
-      return const IntroPage();
-    }
+  Future<void> _initializeChatbotAndNavigate() async {
+    await Provider.of<ChatbotState>(context, listen: false).initialize();
+    await Future.delayed(const Duration(seconds: 2));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const IntroPage();
   }
 }
