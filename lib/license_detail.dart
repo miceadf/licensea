@@ -1,8 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'license.dart';
 import 'license_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class LicenseDetail extends StatelessWidget {
   const LicenseDetail({super.key, required this.license});
@@ -11,6 +14,9 @@ class LicenseDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser; // 현재 로그인된 사용자 정보 가져오기
+    final databaseReference = FirebaseDatabase.instance.ref();
+
     return Scaffold(
       appBar: AppBar(
       //toolbarHeight: 80,
@@ -23,21 +29,12 @@ class LicenseDetail extends StatelessWidget {
             width: 1,
           )
       ),
-      title: const Row(
+      title: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'licensea',
-            style: TextStyle(
-              fontSize: 48,
-              fontStyle: FontStyle.italic,
-              fontFamily: "Inter",
-              fontWeight: FontWeight.w800,
-              height: 0,
-            ),
-          ),
+          SvgPicture.asset('assets/images/title.svg', height: 30.0),
         ],
       ),
     ),
@@ -192,7 +189,13 @@ class LicenseDetail extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                          child: IconButton(onPressed: () {}, icon: Icon(Icons.bookmark)),
+                        child: IconButton(
+                          onPressed: () {
+                            // 북마크 버튼 클릭 시 데이터베이스에 저장
+                            _addBookmark(user, databaseReference, license.name);
+                          },
+                          icon: Icon(Icons.bookmark),
+                        ),
                       ),
                       Expanded(
                           child: Container(
@@ -211,5 +214,19 @@ class LicenseDetail extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Firebase Realtime Database에 북마크 추가
+  void _addBookmark(User? user, DatabaseReference database, String? licenseName) {
+    if (user != null && licenseName != null) {
+      database.child('users/${user.uid}/bookmarks').once().then((event) {
+        DataSnapshot snapshot = event.snapshot;
+        List<dynamic> bookmarks = snapshot.value != null
+            ? (snapshot.value as Iterable).toList()
+            : [];
+        bookmarks.add(licenseName);
+        database.child('users/${user.uid}/bookmarks').set(bookmarks);
+      });
+    }
   }
 }

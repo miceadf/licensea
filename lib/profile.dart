@@ -192,7 +192,7 @@ class _ProfilePageState extends State<ProfilePage> {
             itemCount: userBookmarks.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(userBookmarks[index].toString()),
+                title: Text('•'+userBookmarks[index].toString()),
               );
             },
           )

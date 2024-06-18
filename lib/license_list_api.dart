@@ -92,6 +92,7 @@ class _LicenseListApiState extends State<License_list_api> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             double textWidth = constraints.maxWidth - 134 - 30.0;
