@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:licensea/ai_license_list.dart';
 import 'airecommendation.dart';
-import 'license_list_api.dart';
 import 'home.dart';
 import 'profile.dart';
 import 'chatbot.dart';
@@ -15,15 +15,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int Index = 0;
+  int _currentIndex = 0;
   final AIRecommendationService _aiService = AIRecommendationService();
-
-  List<Widget> screens = [
-    HomePage(),
-    LicenseaChatbotPage(),
-    License_list_api(),
-    ProfilePage(),
-  ];
+  final PageController _pageController = PageController();
 
   List<String> appbarTitle = ['홈', 'AI', '검색', '프로필'];
 
@@ -31,7 +25,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _aiService.initialize().then((_) {
-      _aiService.updateRecommendations(); // AI 추천 로직 실행
+      _aiService.updateRecommendations();
     });
   }
 
@@ -41,10 +35,9 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        title: LayoutBuilder( // LayoutBuilder 추가
+        title: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-            // 텍스트 너비 계산
-            double textWidth = constraints.maxWidth - 134 - 30.0; // 화면 너비 - title.svg 너비 - SizedBox 너비
+            double textWidth = constraints.maxWidth - 134 - 30.0;
 
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,13 +45,13 @@ class _MainPageState extends State<MainPage> {
                 SvgPicture.asset('assets/images/title.svg', height: 30.0),
                 const SizedBox(width: 30),
                 SizedBox(
-                  width: textWidth, // 계산된 텍스트 너비 사용
+                  width: textWidth,
                   child: Text(
                     '\n자격증 정보의 바다',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12,
-                      letterSpacing: textWidth / 17, // 글자 간격을 텍스트 너비에 비례하게 조정
+                      letterSpacing: textWidth / 17,
                     ),
                   ),
                 ),
@@ -68,28 +61,32 @@ class _MainPageState extends State<MainPage> {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        automaticallyImplyLeading: false, // 뒤로가기 버튼 자동 생성 방지
+        automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-          Expanded(
-              child: Container(
-                padding: const EdgeInsets.only(top: 10),
-                color: Colors.white,
-                child: screens[Index],
-              ),
-          ),
+
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index; // 페이지 변경 시 인덱스 업데이트
+          });
+        },
+        children: const [
+          HomePage(),
+          LicenseaChatbotPage(),
+          AI_License(),
+          ProfilePage(),
         ],
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black45,
-        //backgroundColor: Colors.black,
-        currentIndex: Index,
+        currentIndex: _currentIndex,
 
-        onTap: (value) => setState(() {
-          Index = value;
-        }),
+        onTap: (value) {
+          _pageController.jumpToPage(value); // BottomNavigationBarItem 클릭 시 페이지 변경
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.smart_toy_outlined), label: 'AI'),
